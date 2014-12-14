@@ -113,11 +113,9 @@ void socket_c::init() {
 void socket_c::CheckAndAccept() {
     if (connCount < 32) {
         if (FD_ISSET(listenSocket, &rdfd)) {
-            cout << "new connection\t[CheckAndAccept]" << endl;
             cli[connCount].cli_addr_len = sizeof(sockaddr);
             cli[connCount].cli_socket   = accept(listenSocket, (struct sockaddr*)&cli[connCount].cli_addr, &cli[connCount].cli_addr_len);
             newConnEstablished(cli[connCount]);
-            cout << "connection established: " << inet_ntoa(cli[connCount].cli_addr.sin_addr) << ":" << ntohs(cli[connCount].cli_addr.sin_port) << endl;
             connCount ++;
         } else {
             return;
@@ -133,10 +131,8 @@ void socket_c::RecvAndVerify() {
             if (FD_ISSET(cli[_loop].cli_socket, &rdfd)) {
                 int ret = static_cast<int>(recv(cli[_loop].cli_socket, recvBuff, sizeof(recvBuff), 0));
                 if ( ret <= 0) {
-                    cout << "lose connection\t[RecvAndVerify]" << endl;
                     close(cli[_loop].cli_socket);
                     lostAConnection(cli[_loop]);
-                    cout << "clent disconnected:\t" << inet_ntoa(cli[_loop].cli_addr.sin_addr) << ": " << ntohs(cli[_loop].cli_addr.sin_port) << endl;
                     memset(&cli[_loop], 0, sizeof(clients));
                     _loop --;
                     connCount --;
@@ -182,7 +178,7 @@ void* socket_c::listenFucntion(void* param) {
             default:
                 THIS->CheckAndAccept();
                 THIS->RecvAndVerify();
-                THIS->debug();
+                //THIS->debug();
                 break;
         }
     }

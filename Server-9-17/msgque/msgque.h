@@ -15,18 +15,27 @@
 
 using namespace std;
 
+struct clipro {
+    protocol _pkg;
+    clients _cli;
+    clipro(protocol& _p, clients& _c) {
+        _pkg = _p;
+        _cli = _c;
+    }
+};
+
 class msgque{
     
     int                         queCount;
-    list<protocol>              msgQueue;
+    list<clipro>                msgQueue;
     
 public:
     msgque();
     ~msgque();
     
-    void addMsg(protocol);
+    void addMsg(protocol _pkg, clients _cli);
     
-    virtual void msgDealer(protocol _pkg) = 0;
+    virtual void msgDealer(clipro _clipro) = 0;
 
 private:
     static void* queDealer(void* param);

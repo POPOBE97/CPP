@@ -27,13 +27,13 @@ void* msgque::queDealer(void* param) {
             THIS->msgQueue.pop_front();
             THIS->queCount --;
         }
-        usleep(1000);
+        usleep(100);
     }
     THIS->thread_stop = false;
     return nullptr;
 }
 
-void msgque::addMsg(protocol _pkg) {
-    msgQueue.push_back(_pkg);
+void msgque::addMsg(protocol _pkg, clients _cli) {
+    msgQueue.push_back(clipro(_pkg,_cli));
     queCount ++;
 }

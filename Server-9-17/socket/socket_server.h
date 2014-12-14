@@ -28,6 +28,17 @@ struct clients {
     int         cli_socket;
     socklen_t   cli_addr_len;
     struct      sockaddr_in cli_addr;
+    friend bool operator< (const clients& _l, const clients& _r) {
+        return _l.cli_socket<_r.cli_socket? true:false;
+    };
+    
+    friend bool operator== (const clients& _l, const clients& _r) {
+        return _l.cli_socket==_r.cli_socket? true:false;
+    };
+    
+    friend bool operator> (const clients& _l, const clients& _r) {
+        return _l.cli_socket>_r.cli_socket? true:false;
+    };
 };
 
 class socket_c {
@@ -67,6 +78,7 @@ private:
     void        RecvAndVerify();
     int         BindAndListen();
     void        CheckAndAccept();
+    
     char        recvBuff[1024];
     
 private:
